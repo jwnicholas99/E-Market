@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
+from wtforms import StringField, RadioField, PasswordField, SubmitField, TextAreaField, DecimalField, IntegerField
+from wtforms.validators import DataRequired, EqualTo, Email, ValidationError, NumberRange
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -24,3 +24,15 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('This email has already been registered.')
+
+class ProductForm(FlaskForm):
+    name = StringField('Name of Product', validators=[DataRequired()])
+    price = DecimalField('Price', places=2, validators=
+                        [DataRequired(), NumberRange(min=0.00, max=None))])
+    stock = IntegerField('Stock Left',
+                         validators=[DataRequired(), NumberRange(min=0, max=None)])
+
+class ReviewForm(FlaskForm):
+    rating1 = RadioField('Rating', choices=['1', '2', '3', '4', '5'],
+                         validators=[DataRequired()])
+    comments = TextAreaField('Comments')

@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ProductForm
 from app.models import User
 from werkzeug.urls import url_parse
 
@@ -52,6 +52,14 @@ def user(username):
     ]
     return render_template('user.html', user=user, products=products)
         
+@app.route('/newproduct', methods=['GET', 'POST'])
+@login_required
+def newproduct():
+    form = ProductForm()
+    if form.validate_on_submit:
+        product = Product(name=form.name.data)
+    return render_template(url_for('newproduct.html', form=form))
+
 
 @app.route('/logout')
 def logout():
