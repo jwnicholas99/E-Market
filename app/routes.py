@@ -28,8 +28,8 @@ def login():
 def index():
     return render_template('index.html', title="Home")
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
@@ -41,6 +41,17 @@ def register():
         flash('Your account has been registered!')
         return redirect(url_for('login'))
     return render_template('registration.html', title='Register', form=form)
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    products = [
+        {'seller': user, 'name':'Ball', 'price': 9.99, 'stock': 5},
+        {'seller': user, 'name':'Flowers', 'price': 10.00, 'stock': 20}
+    ]
+    return render_template('user.html', user=user, products=products)
+        
 
 @app.route('/logout')
 def logout():

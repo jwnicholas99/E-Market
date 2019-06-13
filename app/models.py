@@ -37,3 +37,4 @@ class Review(db.Model):
     grading = db.Column(db.Integer)
     comments = db.Column(db.String(1000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))

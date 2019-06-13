@@ -4,7 +4,17 @@
 	{% else %}
 	<a href="{{url_for('index')}}">Home</a>
 	<a href="{{url_for('logout')}}">Logout</a>
+	<a href="{{url_for('user', username=current_user.username)}}">Profile</a>
 	{% endif %}
 	<hr>
+		{% with messages = get_flashed_messages %}
+		{% if messages %}
+			<ul>
+				{% for message in flashed_messages %}
+					<li>{{ message }}</li>
+				{% endfor %}
+			</ul>
+		 {% endif %}
+		 {% endwith %}
 	{% block content %}{% endblock %}
 </html>

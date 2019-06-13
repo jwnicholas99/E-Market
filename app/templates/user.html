@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  {% for product in products %}
+    <p>
+      Name: {{product.name}} <br>
+      Price: {{product.price}} <br>
+      Stock Left: {{product.stock}}
+    </p>
+  {% endfor %}
+{% endblock %}
