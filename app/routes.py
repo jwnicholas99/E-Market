@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
 from app.forms import LoginForm, RegistrationForm, ProductForm
-from app.models import User
+from app.models import User, Product
 from werkzeug.urls import url_parse
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -42,23 +42,27 @@ def registration():
         return redirect(url_for('login'))
     return render_template('registration.html', title='Register', form=form)
 
+
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    products = [
-        {'seller': user, 'name':'Ball', 'price': 9.99, 'stock': 5},
-        {'seller': user, 'name':'Flowers', 'price': 10.00, 'stock': 20}
-    ]
+    products = Product.query.filter_by(seller_id=current_user.id).all()
     return render_template('user.html', user=user, products=products)
         
 @app.route('/newproduct', methods=['GET', 'POST'])
 @login_required
 def newproduct():
     form = ProductForm()
-    if form.validate_on_submit:
-        product = Product(name=form.name.data)
-    return render_template(url_for('newproduct.html', form=form))
+    if form.validate_on_submit():
+        product = Product(name=form.name.data,
+                          price=form.price.data,
+                          stock=form.stock.data,
+                          seller_id=current_user.id)
+        db.session.add(product)
+        db.session.commit()
+        return redirect(url_for('user', username=current_user.username))
+    return render_template('newproduct.html', form=form)
 
 
 @app.route('/logout')

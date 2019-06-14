@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add your new product</h2>
+<form action="" method="post">
+  {{form.hidden_tag()}}
+  <p>
+    {{form.name.label}} <br>
+    {{form.name(size=32)}}
+    {% for error in form.name.errors %}
+    <span style="color:red;">[{{error}}]</<span>
+    {% endfor %}
+  </p>
+  <p>
+    {{form.price.label}} <br>
+    {{form.price(size=32)}}
+    {% for error in form.price.errors %}
+    <span style="color:red;">[{{error}}]</<span>
+    {% endfor %}
+  </p>
+  <p>
+    {{form.stock.label}} <br>
+    {{form.stock(size=32)}}
+    {% for error in form.stock.errors %}
+    <span style="color:red;">[{{error}}]</<span>
+    {% endfor %}
+  </p>
+  {{form.submit()}}
+</form>
+{% endblock %}

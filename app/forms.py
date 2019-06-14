@@ -28,11 +28,13 @@ class RegistrationForm(FlaskForm):
 class ProductForm(FlaskForm):
     name = StringField('Name of Product', validators=[DataRequired()])
     price = DecimalField('Price', places=2, validators=
-                        [DataRequired(), NumberRange(min=0.00, max=None))])
+                        [DataRequired(), NumberRange(min=0.00, max=None)])
     stock = IntegerField('Stock Left',
                          validators=[DataRequired(), NumberRange(min=0, max=None)])
+    submit = SubmitField('Submit')
 
 class ReviewForm(FlaskForm):
-    rating1 = RadioField('Rating', choices=['1', '2', '3', '4', '5'],
+    rating = RadioField('Rating', choices=['1', '2', '3', '4', '5'],
                          validators=[DataRequired()])
     comments = TextAreaField('Comments')
+    submit = SubmitField('Submit')

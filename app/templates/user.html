@@ -2,6 +2,9 @@
 
 
 {% block content %}
+  {% if user == current_user %}
+    <a href="{{url_for('newproduct')}}">Add Product</a>
+  {% endif %}
   {% for product in products %}
     <p>
       Name: {{product.name}} <br>

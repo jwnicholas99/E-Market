@@ -28,13 +28,20 @@ class Product(db.Model):
     name = db.Column(db.String(120), index=True)
     price = db.Column(db.Float, index=True)
     stock = db.Column(db.Integer, index=True)
-    ratings = db.Column(db.Integer, index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    avg_ratings = db.Column(db.Float, index=True)
+    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     review = db.relationship('Review', backref='product', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Product {}>'.format(self.name)
+
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    rating = db.Column(db.Integer)
-    comments = db.Column(db.String(1000))
+    gradings = db.Column(db.Float)
+    comments = db.Column(db.String(140))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+
+    def __repr__(self):
+        return '<Review {}>'.format(self.comments)
