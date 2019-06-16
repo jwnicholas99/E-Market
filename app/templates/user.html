@@ -2,16 +2,15 @@
 
 
 {% block content %}
+  <h2>Products Sold</h2>
+  {% for product in products %}
+    {% include '_product.html' %}
+  {% endfor %}
   {% if user == current_user %}
     <a href="{{url_for('newproduct')}}">Add Product</a>
   {% endif %}
-  {% for product in products %}
-  <a href="{{url_for('product', id=product.id)}}">
-    <p>
-      Name: {{product.name}} <br>
-      Price: {{product.price}} <br>
-      Stock Left: {{product.stock}}
-    </p>
-  </a>
+  <h2>Reviews Given</h2>
+  {% for review in reviews %}
+    {% include '_review.html' %}
   {% endfor %}
 {% endblock %}
