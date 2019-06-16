@@ -26,7 +26,8 @@ def login():
 @app.route('/index')
 @login_required
 def index():
-    return render_template('index.html', title="Home")
+    products = Product.query.filter(Product.seller_id != current_user.id).all()
+    return render_template('index.html', title="Home", products=products)
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():

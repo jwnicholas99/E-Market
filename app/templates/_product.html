@@ -2,6 +2,9 @@
   <p>
     Name: {{product.name}} <br>
     Price: {{product.price}} <br>
-    Stock Left: {{product.stock}}
+    Stock Left: {{product.stock}} <br>
+    <a href="{{url_for('user', username=product.seller.username)}}">
+      Sold by: {{product.seller.username}} <br>
+    </a>
   </p>
 </a>

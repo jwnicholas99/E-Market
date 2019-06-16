@@ -7,6 +7,9 @@
     Price: {{product.price}} <br>
     Stock Left: {{product.stock}} <br>
     Ratings: {{product.avg_ratings}} <br>
+    <a href="{{url_for('user', username=product.seller.username)}}">
+      Sold by: {{product.seller.username}} <br>
+    </a>
   </p>
 
   <div>
