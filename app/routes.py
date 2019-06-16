@@ -53,9 +53,20 @@ def registration():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    products = Product.query.filter_by(seller_id=user.id).all()
-    reviews = Review.query.filter_by(user_id = user.id).all()
-    return render_template('user.html', user=user, products=products, reviews=reviews)
+    product_page = request.args.get('product_page', 1, type=int)
+    products = Product.query.filter_by(seller_id=user.id).paginate(product_page, app.config['PER_PAGE'], False)
+    
+    review_page = request.args.get('review_page', 1, type=int)
+    reviews = Review.query.filter_by(user_id = user.id).paginate(review_page, app.config['PER_PAGE'], False)
+
+    product_next_url = url_for('user', product_page=products.next_num, review_page=review_page, username=username) if products.has_next else None
+    product_prev_url = url_for('user', product_page=products.prev_num, review_page=review_page, username=username) if products.has_prev else None
+    review_next_url = url_for('user', review_page=reviews.next_num, product_page=product_page, username=username) if reviews.has_next else None
+    review_prev_url = url_for('user', review_page=reviews.prev_num, product_page=product_page, username=username) if reviews.has_prev else None
+    
+    return render_template('user.html', user=user, products=products.items, reviews=reviews.items,
+                           product_next_url = product_next_url, product_prev_url=product_prev_url,
+                           review_next_url = review_next_url, review_prev_url=review_prev_url)
         
 @app.route('/newproduct', methods=['GET', 'POST'])
 @login_required
