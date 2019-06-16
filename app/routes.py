@@ -1,8 +1,8 @@
 from app import app, db
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
-from app.forms import LoginForm, RegistrationForm, ProductForm
-from app.models import User, Product
+from app.forms import LoginForm, RegistrationForm, ProductForm, ReviewForm
+from app.models import User, Product, Review
 from werkzeug.urls import url_parse
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -63,6 +63,25 @@ def newproduct():
         db.session.commit()
         return redirect(url_for('user', username=current_user.username))
     return render_template('newproduct.html', form=form)
+
+@app.route('/product/<id>')
+@login_required
+def product(id):
+    product = Product.query.filter_by(id=id).first()
+    return render_template('product.html', product=product)
+
+@app.route('/review', methods=['GET', 'POST'])
+def review():
+    form = ReviewForm()
+    if form.validate_on_submit():
+        review = Review(ratings=form.ratings.data,
+                        comments=form.comments.data,
+                        user_id=current_user.id,
+                        product_id=request.args.get('product_id'))
+        db.session.add(review)
+        db.session.commit()
+        return redirect(url_for('product', id=request.args.get('product_id')))
+    return render_template('review.html', form=form)   
 
 
 @app.route('/logout')

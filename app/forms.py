@@ -34,7 +34,6 @@ class ProductForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ReviewForm(FlaskForm):
-    rating = RadioField('Rating', choices=['1', '2', '3', '4', '5'],
-                         validators=[DataRequired()])
+    ratings = StringField('Rating', validators=[DataRequired()])
     comments = TextAreaField('Comments')
     submit = SubmitField('Submit')

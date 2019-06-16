@@ -38,7 +38,7 @@ class Product(db.Model):
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    gradings = db.Column(db.Float)
+    ratings = db.Column(db.String(120), index=True)
     comments = db.Column(db.String(140))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
