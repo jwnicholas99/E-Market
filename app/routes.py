@@ -47,7 +47,7 @@ def registration():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    products = Product.query.filter_by(seller_id=current_user.id).all()
+    products = Product.query.filter_by(seller_id=user.id).all()
     return render_template('user.html', user=user, products=products)
         
 @app.route('/newproduct', methods=['GET', 'POST'])
@@ -74,10 +74,18 @@ def product(id):
 def review():
     form = ReviewForm()
     if form.validate_on_submit():
+        productId = request.args.get('product_id')
         review = Review(ratings=form.ratings.data,
                         comments=form.comments.data,
                         user_id=current_user.id,
-                        product_id=request.args.get('product_id'))
+                        product_id= productId)
+        all_reviews = Review.query.filter_by(product_id = productId).all()
+        no_of_reviews = len(all_reviews)
+        product = Product.query.filter_by(id=productId).first()
+        if product.avg_ratings is None:
+            product.avg_ratings = review.ratings
+        else:
+            product.avg_ratings = (product.avg_ratings * no_of_reviews + int(review.ratings))/(no_of_reviews + 1)  
         db.session.add(review)
         db.session.commit()
         return redirect(url_for('product', id=request.args.get('product_id')))

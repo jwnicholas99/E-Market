@@ -34,6 +34,6 @@ class ProductForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ReviewForm(FlaskForm):
-    ratings = StringField('Rating', validators=[DataRequired()])
+    ratings = StringField('Rating (out of 5)', validators=[DataRequired()])
     comments = TextAreaField('Comments')
     submit = SubmitField('Submit')
