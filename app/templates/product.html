@@ -14,11 +14,18 @@
 
   <div>
   <h2>Reviews</h2>
-    {% for review in product.review %}
+    {% for review in reviews %}
       {% include '_review.html' %}
     {% endfor %}
   </div>
+  {% if prev_url %}
+    <a href="{{ prev_url }}">Previous</a>
+  {% endif %}
+  {% if next_url %}
+    <a href="{{ next_url }}">Next</a>
+  {% endif %}
   {% if product.seller.id != current_user.id%}
+    <br>
     <a href="{{url_for('review', product_id = product.id)}}">Add a review</a>
   {% endif %}
 {% endblock %}

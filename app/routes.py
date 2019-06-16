@@ -26,8 +26,13 @@ def login():
 @app.route('/index')
 @login_required
 def index():
-    products = Product.query.filter(Product.seller_id != current_user.id).all()
-    return render_template('index.html', title="Home", products=products)
+    page = request.args.get('page', 1, type=int)
+    products = Product.query.filter(Product.seller_id != current_user.id)
+    page_products = products.paginate(page, app.config['PER_PAGE'], False)
+    next_url = url_for('index', page=page_products.next_num) if page_products.has_next else None
+    prev_url = url_for('index', page=page_products.prev_num) if page_products.has_prev else None
+    return render_template('index.html', title="Home", products=page_products.items,
+                           next_url=next_url, prev_url=prev_url)
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
@@ -69,8 +74,14 @@ def newproduct():
 @app.route('/product/<id>')
 @login_required
 def product(id):
+    page = request.args.get('page',1,type=int)
     product = Product.query.filter_by(id=id).first()
-    return render_template('product.html', product=product)
+    reviews = Review.query.filter_by(product_id=id)
+    page_reviews = reviews.paginate(page, app.config['PER_PAGE'], False)
+    next_url = url_for('product', id=id, page=page_reviews.next_num) if page_reviews.has_next else None
+    prev_url = url_for('product', id=id, page=page_reviews.prev_num) if page_reviews.has_prev else None
+    return render_template('product.html', product=product, reviews=page_reviews.items,
+                           next_url=next_url, prev_url=prev_url)
 
 @app.route('/review', methods=['GET', 'POST'])
 def review():
