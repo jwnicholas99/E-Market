@@ -4,6 +4,7 @@ from flask_login import login_required, current_user, login_user, logout_user
 from app.forms import LoginForm, RegistrationForm, ProductForm, ReviewForm
 from app.models import User, Product, Review
 from werkzeug.urls import url_parse
+from flask_paginate import Pagination
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -28,11 +29,15 @@ def login():
 def index():
     page = request.args.get('page', 1, type=int)
     products = Product.query.filter(Product.seller_id != current_user.id)
+
+    pagination = Pagination(page=page, total=products.count(), record_name='products')
+    
     page_products = products.paginate(page, app.config['PER_PAGE'], False)
     next_url = url_for('index', page=page_products.next_num) if page_products.has_next else None
     prev_url = url_for('index', page=page_products.prev_num) if page_products.has_prev else None
     return render_template('index.html', title="Home", products=page_products.items,
-                           next_url=next_url, prev_url=prev_url)
+                           next_url=next_url, prev_url=prev_url,
+                           pagination=pagination)
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
