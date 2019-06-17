@@ -79,7 +79,7 @@ def newproduct():
     form = ProductForm()
     if form.validate_on_submit():
         product = Product(name=form.name.data,
-                          price='{0:.2f}'.format(int(form.price.data)),
+                          price=float(form.price.data) + 0.00,
                           stock=form.stock.data,
                           seller_id=current_user.id)
         db.session.add(product)

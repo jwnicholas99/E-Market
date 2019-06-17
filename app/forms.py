@@ -27,7 +27,7 @@ class RegistrationForm(FlaskForm):
 
 class ProductForm(FlaskForm):
     name = StringField('Name of Product', validators=[DataRequired()])
-    price = DecimalField('Price', places=2, validators=
+    price = DecimalField('Price', places=3, validators=
                         [DataRequired(), NumberRange(min=0.00, max=None)])
     stock = IntegerField('Stock Left',
                          validators=[DataRequired(), NumberRange(min=0, max=None)])

@@ -11,10 +11,14 @@
                 </a><br>
                 Stock Left: {{product.stock}}
                 <br>
+                {% if product.avg_ratings %}
+                Ratings: {{'%.2f' % product.avg_ratings}} / 5
+                {% else %}
                 Ratings: {{product.avg_ratings}} / 5
+                {% endif %}
             </td>
             <td style="font-size: 45px; font-family: Neuton">
-                <label style="font-size: 15px; vertical-align: text-top; ">$</label>{{product.price}}
+                <label style="font-size: 15px; vertical-align: text-top; ">$</label>{{'%.2f' % product.price}}
             </td>
         </tr>
     </table>
