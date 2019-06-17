@@ -12,7 +12,10 @@
             </td>
             <td style="font-size: 45px; font-family: Neuton">
                 {{review.ratings}}
-                <label style="font-size: 15px; vertical-align: text-top; ">/ 5</label>
+                <label style="font-size: 15px; vertical-align: text-top; ">/   5</label>
+                {% if review.reviewer.id == current_user.id %}
+                  <a href="{{url_for('deletereview', review_id=review.id, prev=request.url)}}">Delete</a>
+                {% endif %}
             </td>
         </tr>
     </table>

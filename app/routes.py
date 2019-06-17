@@ -100,6 +100,7 @@ def product(id):
                            next_url=next_url, prev_url=prev_url)
 
 @app.route('/review', methods=['GET', 'POST'])
+@login_required
 def review():
     form = ReviewForm()
     if form.validate_on_submit():
@@ -118,9 +119,32 @@ def review():
         db.session.add(review)
         db.session.commit()
         return redirect(url_for('product', id=request.args.get('product_id')))
-    return render_template('review.html', form=form)   
+    return render_template('review.html', form=form)
 
+@app.route('/deleteproduct/<product_id>')
+@login_required
+def deleteproduct(product_id):
+    product = Product.query.filter_by(id=product_id).first_or_404()
+    reviews = Review.query.filter_by(product_id=product_id).all()
+    db.session.delete(product)
+    for review in reviews:
+        db.session.delete(review)
+    db.session.commit()
+    return redirect(url_for('user',username=current_user.username))
 
+@app.route('/deletereview/<review_id>')
+@login_required
+def deletereview(review_id):
+    review = Review.query.filter_by(id=review_id).first_or_404()
+    product = Product.query.filter_by(id=review.product.id).first_or_404()
+    all_reviews = Review.query.filter_by(product_id = product.id).all()
+    no_of_reviews = len(all_reviews)
+    product.avg_ratings = (product.avg_ratings * no_of_reviews - int(review.ratings))/(no_of_reviews - 1)  
+    db.session.delete(review)
+    db.session.commit()
+    prev_url = request.args.get('prev')
+    return redirect(prev_url)
+    
 @app.route('/logout')
 def logout():
     logout_user()
