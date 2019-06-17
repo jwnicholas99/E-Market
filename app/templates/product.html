@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
   <h1>Product Details</h1>
   <p>
     Name: {{product.name}} <br>
-    Price: {{product.price}} <br>
+    Price: ${{product.price}} <br>
     Stock Left: {{product.stock}} <br>
-    Ratings: {{product.avg_ratings}} <br>
+    Average Ratings (out of 5): {{product.avg_ratings}} <br>
     <a href="{{url_for('user', username=product.seller.username)}}">
       Sold by: {{product.seller.username}} <br>
     </a>
@@ -18,14 +18,26 @@
       {% include '_review.html' %}
     {% endfor %}
   </div>
-  {% if prev_url %}
-    <a href="{{ prev_url }}">Previous</a>
-  {% endif %}
-  {% if next_url %}
-    <a href="{{ next_url }}">Next</a>
-  {% endif %}
+  <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> Previous reviews
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    More reviews <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
   {% if product.seller.id != current_user.id%}
     <br>
-    <a href="{{url_for('review', product_id = product.id)}}">Add a review</a>
+    <a href="{{url_for('review', product_id = product.id)}}">Add a review!</a>
+    <br>
+    <br>
+    <br>
+    <br>
   {% endif %}
 {% endblock %}

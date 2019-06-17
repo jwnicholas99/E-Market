@@ -1,10 +1,20 @@
-<a href="{{url_for('product', id=product.id)}}">
-  <p>
-    Name: {{product.name}} <br>
-    Price: {{product.price}} <br>
-    Stock Left: {{product.stock}} <br>
-    <a href="{{url_for('user', username=product.seller.username)}}">
-      Sold by: {{product.seller.username}} <br>
-    </a>
-  </p>
-</a>
+
+<table class="table table-hover">
+        <tr>
+            <td width="80%" style="font-family: Segoe UI Light;">
+                <h3>
+                <a href="{{url_for('product', id=product.id)}}" class="headers">
+                {{product.name}} <br>
+                </a></h3>
+                <a href="{{ url_for('user', username=product.seller.username) }}">
+                Seller: {{product.seller.username}}
+                </a><br>
+                Stock Left: {{product.stock}}
+                <br>
+                Ratings: {{product.avg_ratings}} / 5
+            </td>
+            <td style="font-size: 45px; font-family: Neuton">
+                <label style="font-size: 15px; vertical-align: text-top; ">$</label>{{product.price}}
+            </td>
+        </tr>
+    </table>

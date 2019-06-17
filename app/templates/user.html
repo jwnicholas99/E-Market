@@ -1,28 +1,51 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
-  <h2>Products Sold</h2>
+{% block app_content %}
+  <h1 style="font-family: Segoe UI Semibold;">{{user.username.upper()}}'s Profile</h1>
+  <br>
+  <h2 style="font-family: Segoe UI Semibold;">Products Sold</h2>
   {% for product in products %}
     {% include '_product.html' %}
   {% endfor %}
-  {% if product_prev_url %}
-    <a href="{{ product_prev_url }}">Previous</a>
+
+
+  <nav aria-label="...">
+          <ul class="pager">
+              <li class="previous{% if not product_prev_url %} disabled{% endif %}">
+                  <a href="{{ product_prev_url or '#' }}">
+                      <span aria-hidden="true">&larr;</span> Previous products
+                  </a>
+              </li>
+              <li class="next{% if not product_next_url %} disabled{% endif %}">
+                  <a href="{{ product_next_url or '#' }}">
+                      More products <span aria-hidden="true">&rarr;</span>
+                  </a>
+              </li>
+          </ul>
+      </nav>
+  <br>
+  {% if user.id == current_user.id%}
+    <a href="{{url_for('newproduct')}}"> Add new product </a>
+    <br>
+    <br>
   {% endif %}
-  {% if product_next_url %}
-    <a href="{{ product_next_url }}">Next</a>
-  {% endif %}
-  {% if user == current_user %}
-    <br><a href="{{url_for('newproduct')}}">Add Product</a>
-  {% endif %}
-  <h2>Reviews Given</h2>
+  <h2 style="font-family: Segoe UI Semibold;">Reviews Given</h2>
   {% for review in reviews %}
     {% include '_review.html' %}
   {% endfor %}
-  {% if review_prev_url %}
-    <a href="{{ review_prev_url }}">Previous</a>
-  {% endif %}
-  {% if review_next_url %}
-    <a href="{{ review_next_url }}">Next</a>
-  {% endif %}
+  <nav aria-label="...">
+          <ul class="pager">
+              <li class="previous{% if not review_prev_url %} disabled{% endif %}">
+                  <a href="{{ review_prev_url or '#' }}">
+                      <span aria-hidden="true">&larr;</span> Previous reviews
+                  </a>
+              </li>
+              <li class="next{% if not review_next_url %} disabled{% endif %}">
+                  <a href="{{ review_next_url or '#' }}">
+                      More reviews <span aria-hidden="true">&rarr;</span>
+                  </a>
+              </li>
+          </ul>
+      </nav>
 {% endblock %}

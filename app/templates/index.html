@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 
-{% block content %}
-	<h1>Market</h1>
+{% block app_content %}
+	<h1 style="font-family: Segoe UI Semibold;">Market</h1>
 	{% for product in products %}
 		{% include '_product.html' %}
 	{% endfor %}
-	{% if prev_url %}
-    <a href="{{ prev_url }}">Previous</a>
-  {% endif %}
-  {% if next_url %}
-    <a href="{{ next_url }}">Next</a>
-  {% endif %}
-	{{pagination.links}}
+	<nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> Previous products
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    More products <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 {% endblock %}

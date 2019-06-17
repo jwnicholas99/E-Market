@@ -1,7 +1,18 @@
-<p>
-  <a href="{{url_for('user', username=review.reviewer.username)}}">
-    Name: {{review.reviewer.username}}<br>
-  </a>
-  Rating: {{review.ratings}} <br>
-  Comments: {{review.comments}} <br>
-</p>
+<table class="table table-hover">
+        <tr>
+            <td width="80%" style="font-family: Segoe UI Light;">
+                <h3>
+                <a href="{{url_for('product', id=review.product.id)}}" class="headers">
+                {{review.product.name}} <br>
+                </a></h3>
+                <a href="{{ url_for('user', username=review.reviewer.username) }}">
+                Reviewed by: {{review.reviewer.username}}
+                </a><br>
+                {{review.comments}}
+            </td>
+            <td style="font-size: 45px; font-family: Neuton">
+                {{review.ratings}}
+                <label style="font-size: 15px; vertical-align: text-top; ">/ 5</label>
+            </td>
+        </tr>
+    </table>
