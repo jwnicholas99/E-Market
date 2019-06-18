@@ -50,6 +50,7 @@ class Product(db.Model):
     price = db.Column(db.Float, index=True)
     stock = db.Column(db.Integer, index=True)
     avg_ratings = db.Column(db.Float, index=True)
+    image_url = db.Column(db.String(400), index=True)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     review = db.relationship('Review', backref='product', lazy='dynamic')
     buyers = db.relationship(

@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, RadioField, PasswordField, SubmitField, TextAreaField, DecimalField, IntegerField
+from wtforms import StringField, RadioField, PasswordField, SubmitField, TextAreaField, DecimalField, IntegerField, FileField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError, NumberRange
 from app.models import User
+from werkzeug.utils import secure_filename
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -31,6 +32,7 @@ class ProductForm(FlaskForm):
                         [DataRequired(), NumberRange(min=0.00, max=None)])
     stock = IntegerField('Stock Left',
                          validators=[DataRequired(), NumberRange(min=0, max=None)])
+    image = FileField('Upload an image', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class ReviewForm(FlaskForm):

@@ -1,6 +1,9 @@
 
 <table class="table table-hover">
         <tr>
+            <td>
+              <img width = "100px;" src="{{url_for('static', filename=product.image_url)}}" alt="image">
+            </td>
             <td width="80%" style="font-family: Segoe UI Light;">
                 <h3>
                 <a href="{{url_for('product', id=product.id)}}" class="headers">

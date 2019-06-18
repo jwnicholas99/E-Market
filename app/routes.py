@@ -5,6 +5,8 @@ from app.forms import LoginForm, RegistrationForm, ProductForm, ReviewForm
 from app.models import User, Product, Review
 from werkzeug.urls import url_parse
 from flask_paginate import Pagination
+from werkzeug.utils import secure_filename
+import os
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -76,10 +78,15 @@ def user(username):
 def newproduct():
     form = ProductForm()
     if form.validate_on_submit():
+        f = form.image.data
+        filename = secure_filename(f.filename)
+        save_url = os.path.join('app', 'static', filename)
+        f.save(save_url)
         product = Product(name=form.name.data,
-                          price=float(form.price.data) + 0.00,
+                          price=float(form.price.data),
                           stock=form.stock.data,
-                          seller_id=current_user.id)
+                          seller_id=current_user.id,
+                          image_url=filename)
         db.session.add(product)
         db.session.commit()
         return redirect(url_for('user', username=current_user.username))
