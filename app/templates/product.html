@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-  <h1>Product Details</h1>
+  <h1 class="headers">Product Details</h1>
   <p>
     Name: {{product.name}} <br>
     Price: ${{product.price}} <br>
@@ -13,7 +13,7 @@
   </p>
 
   <div>
-  <h2>Reviews</h2>
+  <h2 class="headers">Reviews</h2>
     {% for review in reviews %}
       {% include '_review.html' %}
     {% endfor %}

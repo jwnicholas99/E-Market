@@ -1,4 +1,3 @@
-
 <table class="table table-hover">
         <tr>
             <td width="80%" style="font-family: Segoe UI Light;">
@@ -19,11 +18,7 @@
             </td>
             <td style="font-size: 45px; font-family: Neuton">
                 <label style="font-size: 15px; vertical-align: text-top; ">$</label>{{'%.2f' % product.price}}
-                {% if product.seller.id == current_user.id %}
-                  <a href="{{url_for('deleteproduct', product_id=product.id)}}">Delete</a>
-                {% else %}
-                  <a href="{{url_for('addcart', product_id=product.id, prev=request.url)}}">Put in Cart</a>
-                {% endif %}
+                <br><a href="{{url_for('removecart', product_id=product.id)}}">Remove from cart</a>
             </td>
         </tr>
     </table>

@@ -29,9 +29,7 @@ def login():
 def index():
     page = request.args.get('page', 1, type=int)
     products = Product.query.filter(Product.seller_id != current_user.id)
-
     pagination = Pagination(page=page, total=products.count(), record_name='products')
-    
     page_products = products.paginate(page, app.config['PER_PAGE'], False)
     next_url = url_for('index', page=page_products.next_num) if page_products.has_next else None
     prev_url = url_for('index', page=page_products.prev_num) if page_products.has_prev else None
@@ -144,7 +142,63 @@ def deletereview(review_id):
     db.session.commit()
     prev_url = request.args.get('prev')
     return redirect(prev_url)
-    
+
+@app.route('/addcart/<product_id>')
+@login_required
+def addcart(product_id):
+    prev_url = request.args.get('prev')
+    product = Product.query.filter_by(id = product_id).first()
+    if product is None:
+        flash('Product is not found')
+        return redirect(prev_url)
+    if product.stock < 1:
+        flash('No stock!')
+        return redirect(prev_url)
+    current_user.add_to_cart(product)
+    db.session.commit()
+    flash('Added {} to cart!'.format(product.name))
+    return redirect(prev_url)
+
+@app.route('/removecart/<product_id>')
+@login_required
+def removecart(product_id):
+    prev_url = request.args.get('prev')
+    product = Product.query.filter_by(id = product_id).first()
+    if product is None:
+        flash('Product is not found')
+        return redirect(url_for('cart'))
+    current_user.remove_cart(product)
+    db.session.commit()
+    flash('Removed {} from cart!'.format(product.name))
+    return redirect(url_for('cart'))
+
+@app.route('/cart')
+@login_required
+def cart():
+    cart = current_user.in_cart
+    return render_template('cart.html', cart=cart)
+
+@app.route('/checkout_cart')
+@login_required
+def checkout_cart():
+    cart = current_user.in_cart
+    for product in cart:
+        current_user.remove_cart(product)
+        product.stock -= 1
+        flash('Bought one {}'.format(product.name))
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/clear_cart')
+@login_required
+def clear_cart():
+    cart = current_user.in_cart
+    for product in cart:
+        current_user.remove_cart(product)
+    flash('Your cart has been cleared!')
+    db.session.commit()
+    return redirect(url_for('index'))
+        
 @app.route('/logout')
 def logout():
     logout_user()

@@ -37,3 +37,7 @@ class ReviewForm(FlaskForm):
     ratings = StringField('Rating (out of 5)', validators=[DataRequired()])
     comments = TextAreaField('Comments')
     submit = SubmitField('Submit')
+
+class ProductFilterForm(FlaskForm):
+    filter = RadioField('Filter by', choices=['Ratings', 'Price'])
+    submit = SubmitField('Filter')

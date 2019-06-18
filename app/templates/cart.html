@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+  <label>
+    <a href="{{url_for('checkout_cart')}}">
+      <h2 class="headers">Checkout Cart</h2>
+    </a>
+    <a href="{{url_for('clear_cart')}}">
+      <h2 class = "headers" style="align-self: right;">Clear</h2>
+    </a>
+  </label>
+  {% for product in cart %}
+    {% include '_cart_product.html' %}
+  {% endfor %}
+{% endblock %}
