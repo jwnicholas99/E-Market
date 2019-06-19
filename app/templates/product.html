@@ -2,17 +2,26 @@
 
 {% block app_content %}
   <h1 class="headers">Product Details</h1>
-  <p>
-    Name: {{product.name}} <br>
-    Price: ${{product.price}} <br>
-    Stock Left: {{product.stock}} <br>
-    Average Ratings (out of 5): {{product.avg_ratings}} <br>
-    <a href="{{url_for('user', username=product.seller.username)}}">
-      Sold by: {{product.seller.username}} <br>
-    </a>
-  </p>
-
+  <br>
+  <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+    <img width = "270px;" src="{{url_for('static', filename=product.image_url)}}" alt="image">
+    <p style="margin-left: 50px; margin-top: 30px;">
+      <strong>Name:</strong> {{product.name}} <br>
+      <strong>Price:</strong> ${{'%.2f' % product.price}} <br>
+      <strong>Stock Left:</strong> {{product.stock}} <br>
+      {% if product.avg_ratings %}
+      <strong>Ratings:</strong> {{'%.1f' % product.avg_ratings}} / 5
+      {% else %}
+      <strong>Ratings:</strong> {{product.avg_ratings}} / 5
+      {% endif %}
+      <br>
+      <a href="{{url_for('user', username=product.seller.username)}}">
+        <strong>Sold by:</strong> {{product.seller.username}} <br>
+      </a>
+    </p>
+  </div>
   <div>
+    <br>
   <h2 class="headers">Reviews</h2>
     {% for review in reviews %}
       {% include '_review.html' %}
